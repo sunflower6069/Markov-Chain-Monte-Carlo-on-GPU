@@ -9,9 +9,11 @@ With the mounting demand to simulate systems of greater size and longer time sca
 Herein we present a Markov chain Monte Carlo simulation implementation on hard-sphere-particle systems. The algorithms used in the program is largely depends on a recent work by Joshua Anderson et. al in ref. 5.
 
 ### Implementation ###
-The GPU MCMCpar program was written in CUDA C and compiled with NVCC version 6.0.37 (module load Langs/Intel/14 Langs/Cuda/6.0).
+The GPU MCMCpar program was written in CUDA C and compiled with NVCC.
+
 The .cu source code was compiled by each one of the following options:
 nvcc –O3 -lcuda -lcudart –lm -gencode=arch=compute_20,code=\"sm_20,compute_20\"
+
 And was linked by the command:
 MCMCpar: MCMCpar.o
 nvcc –O3 -lcuda -lcudart –lm gencode = arch = compute_20, code = \" sm_20, compute_20 \" -o $@ $^
