@@ -1,28 +1,74 @@
-# Markov-Chain-Monte-Carlo-on-GPU
-This is a Markov chain Monte Carlo simulation implementation on hard-sphere-particle systems.
+### CPSC 424/524 Final Project ###
+### Markov Chain Monte Carlo Simulation on GPUs for hard-sphere particles ###
+### Author: Xin Yan ###
+### Date: Dec. 15, 2014 ###
 
-### Background ###
-Monte Carlo algorithms are widely considered to be well suited to parallel computing [1]. However, in Monte Carlo simulations of thermodynamic ensembles of many-particle systems, the inherent sequential nature of statistical sampling in order to preserve the Markov chain precludes the possibility of using an “embarrassingly parallelizable” algorithm. This is because the generation of new configurations follows an irreducible Markov chain, in which every new configuration of the thermodynamic ensembles is dependent on the immediate predecessor, but not on any other previous steps [2].
+#################################
+#    General Introduction       #
+#################################
+This project aims at implementing a massively paralleled method on GPUs that performs 
+Monte Carlo simulations of thermodynamic ensembles of hard-sphere particles that obeys
+the detailed balance principle on a single Markov chain.
 
-With the mounting demand to simulate systems of greater size and longer time scales, massive parallelization of computer clusters becomes the natural choice to meet the requirements in scientific computing. In recent years, several parallel Markov chain Monte Carlo simulation techniques have been developed with Message Passing Interface (MPI) [3-4] and GPUs. [5] The parallelization could be achieved in different levels, and can be loosely classified into: 1) domain-decomposition; 2) parallel energy calculation; 3) hybrid Monte Carlo; and 4) task farming. [6] Among these techniques, the domain decomposition method divides the simulation system into smaller sub-domains, and assigns each worker with a single sub-domain that can be updated semi-independently. It is also the most popular technique thanks to its massive parallelizable potential and favorable scaling properties.
+The algorithms used in the program is based on the following publication:
+Anderson, J. A. et. al, Massively parallel Monte Carlo for many-particle simulations on GPUs. 
+Journal of Computational Physics 2013, 254, 27.
 
-Herein we present a Markov chain Monte Carlo simulation implementation on hard-sphere-particle systems. The algorithms used in the program is largely depends on a recent work by Joshua Anderson et. al in ref. 5.
+The pdf of the paper can be found in the current directory.
 
-### Implementation ###
-The GPU MCMCpar program was written in CUDA C and compiled with NVCC.
 
-The .cu source code was compiled by each one of the following options:
-nvcc –O3 -lcuda -lcudart –lm -gencode=arch=compute_20,code=\"sm_20,compute_20\"
+#################################
+# Instructions on Using MCMCpar #
+#################################
 
-And was linked by the command:
-MCMCpar: MCMCpar.o
-nvcc –O3 -lcuda -lcudart –lm gencode = arch = compute_20, code = \" sm_20, compute_20 \" -o $@ $^
-.cu.o:
-nvcc –O3 -lcuda -lcudart –lm gencode = arch = compute_20, code = \" sm_20, compute_20 \" -o $@ $<
+This directory contains a Markov chain Monte Carlo simulation code in MCMCpar.cu.
 
-### References ###
-[1] Rosenthal, Jeffery S. Far East Journal of Theoretical Statistics 4 (2000), 207-236.
-[2] Hammersley, J. M, Handscomb, D. C. Monte Carlo Methods. New York: John Wiley & Sons Inc. (1965), Chapter 9, 113-126.
-[3] Ren, R., Orkoulas, G. Journal of Chemical Physics 126 (2007), 211102.
-[4] O’Keeffe C. J., Orkoulas G. Journal of Chemical Physics 130 (2009), 134109.
-[5] Anderson J. A., et. al, Journal of Computational Physics 254 (2013) 27-38.
+Please make sure to load the required modules before running the program via command:
+
+module load Langs/Intel/14 Langs/Cuda/6.0
+
+To build the sample code, run:
+
+make
+
+This make command uses the makefile Makefile, which invokes the nvcc compiler 
+to build the code. 
+
+Once the code is built, you can execute it using:
+
+./MCMCpar <N> <m> <blockDim> <maxMCiter>
+
+where 
+
+    <N>: total number of hard-sphere particles in the simulation system
+
+    <m>: number of cells in each dimension of the simulation system.
+    
+    <blockDim>: number of threads in each dimension of a block.
+    
+    <maxMCiter>: total number of Monte Carlo sweep iterations. 
+
+So this means that  
+
+     blockDim.x = blockDim.y = <blockDim>
+     blockDim.z = 1
+
+For more specific instructions on how to set the parameters, please see FinalTestRun.sh
+
+######################################
+#         Testjobs                   #
+######################################
+
+After obtained the executable of the program, the userers are encouraged to run the testjobs:
+
+bash FinalTestRun.sh
+
+######################################
+#           Output                   #
+######################################
+
+The output of the MCMCpar program is written to STDOUT which can be redirected to a file.
+
+The output contains the information of the simulation system, execution status, as well as the 
+wallclock time and particle coordinates.
+
