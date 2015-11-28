@@ -1,5 +1,4 @@
-/*  This is a CUDA GPU program for CPSC424 Final Project
-    Paraller Markov Chain Monte Carlo for Hard-Sphere-Particle Simulations on GPUs
+/*  Paraller Markov Chain Monte Carlo for Hard-Sphere-Particle Simulations on GPUs
     Numerical Precision: Single Point
     Author: Xin Yan
     Credit: Part of the algorithms in this program is adapted from Joshua A. Anderson et. al
