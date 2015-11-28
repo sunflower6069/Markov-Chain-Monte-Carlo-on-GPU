@@ -1,4 +1,3 @@
-### CPSC 424/524 Final Project ###
 ### Markov Chain Monte Carlo Simulation on GPUs for hard-sphere particles ###
 ### Author: Xin Yan ###
 ### Date: Dec. 15, 2014 ###
